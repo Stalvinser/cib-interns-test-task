@@ -1,5 +1,6 @@
 package socks.service;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import socks.entity.SocksEntity;
 import socks.repository.SocksRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SocksService {
@@ -44,7 +46,24 @@ public class SocksService {
     }
 
 
+    public ResponseEntity<?> registerNewSocksIncome(SocksEntity sock) {
+        Optional<SocksEntity> repoSock = socksRepository.findSocksEntitiesByColorAndCottonPart(sock.getColor(), sock.getCottonPart());
+        if (repoSock.isPresent()) {
+        SocksEntity finalSock = repoSock.get();
+        finalSock.setQuantity(finalSock.getQuantity() + sock.getQuantity());
+        socksRepository.save(finalSock);
+        }
+        else {
+            socksRepository.save(sock);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+
     public Iterable<SocksEntity> findAll() {
         return socksRepository.findAll();
     }
+
+
 }

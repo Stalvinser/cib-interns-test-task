@@ -31,7 +31,7 @@ public class SocksEntity {
     private int quantity;
 
     public SocksEntity(String color, int cottonPart, int quantity) {
-        this.color = color;
+        this.color = color.toLowerCase().trim();
         this.cottonPart = cottonPart;
         this.quantity = quantity;
     }
