@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import socks.model.Socks;
 import socks.repository.SocksRepository;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
@@ -15,7 +16,7 @@ public class SocksDataLoader {
         this.socksRepository = socksRepository;
     }
 
-    //@PostConstruct
+    @PostConstruct
     private void loadData() {
         socksRepository.saveAll(List.of(
                 new Socks("red",80,40),
