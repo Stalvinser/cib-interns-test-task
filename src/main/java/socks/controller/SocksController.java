@@ -1,15 +1,20 @@
 package socks.controller;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import socks.entity.SocksEntity;
+import socks.dto.SocksDTO;
+import socks.mapper.SocksMapper;
+import socks.model.Socks;
 import socks.service.SocksService;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/socks")
+@Validated
 public class SocksController {
     private final SocksService socksService;
 
@@ -17,22 +22,25 @@ public class SocksController {
         this.socksService = socksService;
     }
 
-
-
-    @PostMapping(value = "/income", consumes = "application/json")
-    public ResponseEntity<?> registerNewSocksIncome (@Valid @RequestBody SocksEntity socks) {
-        return socksService.registerNewSocksIncome(socks);
+    @PostMapping("/income")
+    public ResponseEntity<?> registerNewSocksIncome(@Valid @RequestBody SocksDTO socksDTO) {
+        Socks sock = SocksMapper.DtoToEntity(socksDTO);
+        socksService.registerNewSocksIncome(sock);
+        return ResponseEntity.ok("socks income registered");
     }
 
     @GetMapping
     public ResponseEntity<String> getSockByColorAndCottonPart(@Valid @RequestParam("color") String color,
                                                               @Valid @RequestParam("operation") String operation,
                                                               @Valid @RequestParam("cottonPart") int cottonPart) {
-        return socksService.getSockByColorAndCottonPart(color, operation, cottonPart);
+
+        return new ResponseEntity<>(socksService.getSockByColorAndCottonPart(color, operation, cottonPart),
+                HttpStatus.OK);
+
     }
 
     @GetMapping("/allSocks")
-    Iterable<SocksEntity> getSocks() {
+    Iterable<Socks> getSocks() {
         return socksService.findAll();
     }
 

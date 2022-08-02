@@ -1,17 +1,16 @@
 package socks.service;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import socks.entity.SocksEntity;
+import org.springframework.transaction.annotation.Transactional;
+import socks.exception.SocksBadRequestException;
+import socks.model.Socks;
 import socks.repository.SocksRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SocksService {
+public class SocksService implements ISocksService{
     private final SocksRepository socksRepository;
 
 
@@ -19,49 +18,48 @@ public class SocksService {
         this.socksRepository = socksRepository;
     }
 
-    public ResponseEntity<String> getSockByColorAndCottonPart(String color, String operation, int cottonPart) {
-        List<SocksEntity> socksEntityList;
+    public String getSockByColorAndCottonPart(String color, String operation, int cottonPart) {
+        List<Socks> socksList;
         switch (operation) {
             case "moreThan":
-                socksEntityList =
+                socksList =
                         socksRepository.findByColorAndCottonPartGreaterThan(color, cottonPart);
                 break;
             case "lessThan":
-                socksEntityList =
+                socksList =
                         socksRepository.findByColorAndCottonPartLessThan(color, cottonPart);
                 break;
             case "equal":
-                socksEntityList =
+                socksList =
                         socksRepository.findByColorAndCottonPartEquals(color, cottonPart);
                 break;
             default:
-                return new ResponseEntity<>("0", HttpStatus.BAD_REQUEST);
+                throw new SocksBadRequestException("Invalid operation request");
         }
         int socksQuantity = 0;
-        for (SocksEntity sock : socksEntityList) {
+        for (Socks sock : socksList) {
             System.out.println(sock.toString());
             socksQuantity += sock.getQuantity();
         }
-        return new ResponseEntity<>(String.valueOf(socksQuantity), HttpStatus.OK);
+        return  String.valueOf(socksQuantity);
     }
 
-
-    public ResponseEntity<?> registerNewSocksIncome(SocksEntity sock) {
-        Optional<SocksEntity> repoSock = socksRepository.findSocksEntitiesByColorAndCottonPart(sock.getColor(), sock.getCottonPart());
+    @Transactional
+    public void registerNewSocksIncome (Socks sock) {
+        Optional<Socks> repoSock = socksRepository.findSocksEntitiesByColorAndCottonPart(sock.getColor(), sock.getCottonPart());
         if (repoSock.isPresent()) {
-        SocksEntity finalSock = repoSock.get();
-        finalSock.setQuantity(finalSock.getQuantity() + sock.getQuantity());
-        socksRepository.save(finalSock);
+            Socks finalSock = repoSock.get();
+            finalSock.setQuantity(finalSock.getQuantity() + sock.getQuantity());
+            socksRepository.save(finalSock);
         }
         else {
             socksRepository.save(sock);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
 
-
-    public Iterable<SocksEntity> findAll() {
+    public Iterable<Socks> findAll() {
         return socksRepository.findAll();
     }
 

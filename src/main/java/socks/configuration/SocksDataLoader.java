@@ -1,7 +1,7 @@
 package socks.configuration;
 
 import org.springframework.stereotype.Component;
-import socks.entity.SocksEntity;
+import socks.model.Socks;
 import socks.repository.SocksRepository;
 
 import java.util.List;
@@ -18,10 +18,10 @@ public class SocksDataLoader {
     //@PostConstruct
     private void loadData() {
         socksRepository.saveAll(List.of(
-                new SocksEntity("red",80,40),
-                new SocksEntity("blue",10,10),
-                new SocksEntity("white",30,25),
-                new SocksEntity("yellow",50,3)));
+                new Socks("red",80,40),
+                new Socks("blue",10,10),
+                new Socks("white",30,25),
+                new Socks("yellow",50,3)));
     }
 
 
