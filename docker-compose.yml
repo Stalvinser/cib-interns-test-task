@@ -1,11 +1,17 @@
-version: '3'
-
+version: "3"
 services:
-  socks-db:
-    image: postgres:11.0
+  api_service:
+    build: .
+    restart: always
     ports:
-      - 5432:5432
+      - "8080:8080"
+    depends_on:
+      - postgres_db
+  postgres_db:
+    image: "postgres:11.4"
+    restart: always
+    ports:
+      - "5433:5432"
     environment:
-      POSTGRES_DB: Socks
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: socks
+      POSTGRES_PASSWORD: nE5kMc7JCGNqwDQM
