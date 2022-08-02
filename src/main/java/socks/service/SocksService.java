@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SocksService implements ISocksService{
+public class SocksService implements ISocksService {
     private final SocksRepository socksRepository;
 
 
@@ -18,6 +18,7 @@ public class SocksService implements ISocksService{
         this.socksRepository = socksRepository;
     }
 
+    @Override
     public String getSockByColorAndCottonPart(String color, String operation, int cottonPart) {
         List<Socks> socksList;
         switch (operation) {
@@ -41,24 +42,42 @@ public class SocksService implements ISocksService{
             System.out.println(sock.toString());
             socksQuantity += sock.getQuantity();
         }
-        return  String.valueOf(socksQuantity);
+        return String.valueOf(socksQuantity);
     }
 
     @Transactional
-    public void registerNewSocksIncome (Socks sock) {
+    @Override
+    public void registerNewSocksIncome(Socks sock) {
         Optional<Socks> repoSock = socksRepository.findSocksEntitiesByColorAndCottonPart(sock.getColor(), sock.getCottonPart());
         if (repoSock.isPresent()) {
             Socks finalSock = repoSock.get();
             finalSock.setQuantity(finalSock.getQuantity() + sock.getQuantity());
             socksRepository.save(finalSock);
-        }
-        else {
+        } else {
             socksRepository.save(sock);
         }
+    }
+
+    @Transactional
+    @Override
+    public void registerNewSocksOutcome(Socks sock) {
+        Optional<Socks> repoSock = socksRepository.findSocksEntitiesByColorAndCottonPart(sock.getColor(), sock.getCottonPart());
+        if (repoSock.isPresent()) {
+            if (repoSock.get().getQuantity() >= sock.getQuantity()) {
+                Socks tempSock = repoSock.get();
+                tempSock.setQuantity(tempSock.getQuantity() - sock.getQuantity());
+                socksRepository.save(tempSock);
+            } else
+                throw new SocksBadRequestException("not enough socks at warehouse, socks stored at warehouse = "
+                        + repoSock.get().getQuantity() +
+                        " socks ordered for outcome = " + sock.getQuantity());
+        } else
+            throw new SocksBadRequestException("no such color " + sock.getColor() +
+                     " with cottonpart value "  + sock.getCottonPart() + " at warehouse");
 
     }
 
-
+    @Override
     public Iterable<Socks> findAll() {
         return socksRepository.findAll();
     }

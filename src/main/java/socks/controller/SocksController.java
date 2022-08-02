@@ -9,7 +9,6 @@ import socks.dto.SocksDTO;
 import socks.mapper.SocksMapper;
 import socks.model.Socks;
 import socks.service.SocksService;
-
 import javax.validation.Valid;
 
 @RestController
@@ -29,10 +28,24 @@ public class SocksController {
         return ResponseEntity.ok("socks income registered");
     }
 
+    @PostMapping("/outcome")
+    public ResponseEntity<?> registerNewSocksOutcome(@Valid @RequestBody SocksDTO socksDTO) {
+        Socks sock = SocksMapper.DtoToEntity(socksDTO);
+        socksService.registerNewSocksOutcome(sock);
+        return ResponseEntity.ok("socks outcome delivery status - ok");
+    }
+
+
+
+
+
+
+
     @GetMapping
     public ResponseEntity<String> getSockByColorAndCottonPart(@Valid @RequestParam("color") String color,
                                                               @Valid @RequestParam("operation") String operation,
                                                               @Valid @RequestParam("cottonPart") int cottonPart) {
+
 
         return new ResponseEntity<>(socksService.getSockByColorAndCottonPart(color, operation, cottonPart),
                 HttpStatus.OK);

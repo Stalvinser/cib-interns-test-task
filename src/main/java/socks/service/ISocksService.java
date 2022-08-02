@@ -11,6 +11,8 @@ public interface ISocksService {
 
     void registerNewSocksIncome(Socks sock);
 
+    void registerNewSocksOutcome (Socks sock);
+
     Iterable<Socks> findAll();
 
 }

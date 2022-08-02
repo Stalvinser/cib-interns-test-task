@@ -15,4 +15,6 @@ public interface SocksRepository extends CrudRepository<Socks, Long> {
     Optional<Socks> findSocksEntitiesByColorAndCottonPart(String color, Integer cottonPart);
 
 
+
+
 }
