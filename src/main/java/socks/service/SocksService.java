@@ -1,8 +1,9 @@
 package socks.service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import socks.exception.SocksBadRequestException;
 import socks.model.Socks;
 import socks.repository.SocksRepository;
 
@@ -19,7 +20,7 @@ public class SocksService implements ISocksService {
     }
 
     @Override
-    public String getSockByColorAndCottonPart(String color, String operation, int cottonPart) {
+    public ResponseEntity<String> getSockByColorAndCottonPart(String color, String operation, int cottonPart) {
         List<Socks> socksList;
         switch (operation) {
             case "moreThan":
@@ -35,45 +36,50 @@ public class SocksService implements ISocksService {
                         socksRepository.findByColorAndCottonPartEquals(color, cottonPart);
                 break;
             default:
-                throw new SocksBadRequestException("Invalid operation request");
+                return new ResponseEntity<>("Invalid operation request", HttpStatus.BAD_REQUEST);
         }
         int socksQuantity = 0;
         for (Socks sock : socksList) {
             System.out.println(sock.toString());
             socksQuantity += sock.getQuantity();
         }
-        return String.valueOf(socksQuantity);
+        return new ResponseEntity<>(String.valueOf(socksQuantity), HttpStatus.BAD_REQUEST);
     }
 
     @Transactional
     @Override
-    public void registerNewSocksIncome(Socks sock) {
+    public ResponseEntity<?> registerNewSocksIncome(Socks sock) {
         Optional<Socks> repoSock = socksRepository.findSocksEntitiesByColorAndCottonPart(sock.getColor(), sock.getCottonPart());
         if (repoSock.isPresent()) {
-            Socks finalSock = repoSock.get();
+            Socks finalSock = new Socks(repoSock.get().getColor(),
+                    repoSock.get().getCottonPart(), repoSock.get().getQuantity());
             finalSock.setQuantity(finalSock.getQuantity() + sock.getQuantity());
             socksRepository.save(finalSock);
+            return new ResponseEntity<>("Socks income registered", HttpStatus.OK);
         } else {
             socksRepository.save(sock);
+            return new ResponseEntity<>("New socks income registered", HttpStatus.OK);
         }
     }
 
     @Transactional
     @Override
-    public void registerNewSocksOutcome(Socks sock) {
+    public ResponseEntity<?> registerNewSocksOutcome(Socks sock) {
         Optional<Socks> repoSock = socksRepository.findSocksEntitiesByColorAndCottonPart(sock.getColor(), sock.getCottonPart());
         if (repoSock.isPresent()) {
             if (repoSock.get().getQuantity() >= sock.getQuantity()) {
-                Socks tempSock = repoSock.get();
+                Socks tempSock = new Socks(repoSock.get().getColor(),
+                        repoSock.get().getCottonPart(), repoSock.get().getQuantity());
                 tempSock.setQuantity(tempSock.getQuantity() - sock.getQuantity());
                 socksRepository.save(tempSock);
+                return new ResponseEntity<>("Socks outcome registered", HttpStatus.OK);
             } else
-                throw new SocksBadRequestException("not enough socks at warehouse, socks stored at warehouse = "
+                return new ResponseEntity<>("not enough socks at warehouse, socks stored at warehouse = "
                         + repoSock.get().getQuantity() +
-                        " socks ordered for outcome = " + sock.getQuantity());
+                        " socks ordered for outcome = " + sock.getQuantity(), HttpStatus.BAD_REQUEST);
         } else
-            throw new SocksBadRequestException("no such color " + sock.getColor() +
-                     " with cottonpart value "  + sock.getCottonPart() + " at warehouse");
+            return new ResponseEntity<>("no such color " + sock.getColor() +
+                    " with cottonpart value " + sock.getCottonPart() + " at warehouse", HttpStatus.BAD_REQUEST);
 
     }
 

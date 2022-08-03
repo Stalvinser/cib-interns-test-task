@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ISocksService {
-    String getSockByColorAndCottonPart(String color, String operation, int cottonPart);
+    ResponseEntity<String> getSockByColorAndCottonPart(String color, String operation, int cottonPart);
 
-    void registerNewSocksIncome(Socks sock);
+    ResponseEntity<?> registerNewSocksIncome(Socks sock);
 
-    void registerNewSocksOutcome (Socks sock);
+    ResponseEntity<?> registerNewSocksOutcome (Socks sock);
 
     Iterable<Socks> findAll();
 
