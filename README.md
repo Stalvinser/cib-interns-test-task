@@ -1,5 +1,3 @@
-### API доступен по адресу:
-https://sock-stock.herokuapp.com
 
 # Тестовое задание для Java стажеров
 
