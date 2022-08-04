@@ -14,7 +14,6 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/socks")
-@Validated
 public class SocksController {
     private final SocksService socksService;
 

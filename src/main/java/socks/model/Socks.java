@@ -19,7 +19,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 public class Socks {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     private String color;
     private int cottonPart;

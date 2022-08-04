@@ -2,6 +2,7 @@ package socks.dto;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.*;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.*;
 @Setter
 @Accessors(chain = true)
 @NoArgsConstructor
+@Validated
 public class SocksDTO {
     @Size(min =2 ,max = 30, message = "Size can`t be less than 2 characters or greater than 30")
     @NotBlank(message = "Please provide a color")

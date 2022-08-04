@@ -51,8 +51,7 @@ public class SocksService implements ISocksService {
     public ResponseEntity<?> registerNewSocksIncome(Socks sock) {
         Optional<Socks> repoSock = socksRepository.findSocksEntitiesByColorAndCottonPart(sock.getColor(), sock.getCottonPart());
         if (repoSock.isPresent()) {
-            Socks finalSock = new Socks(repoSock.get().getColor(),
-                    repoSock.get().getCottonPart(), repoSock.get().getQuantity());
+            Socks finalSock = repoSock.get();
             finalSock.setQuantity(finalSock.getQuantity() + sock.getQuantity());
             socksRepository.save(finalSock);
             return new ResponseEntity<>("Socks income registered", HttpStatus.OK);
@@ -68,8 +67,7 @@ public class SocksService implements ISocksService {
         Optional<Socks> repoSock = socksRepository.findSocksEntitiesByColorAndCottonPart(sock.getColor(), sock.getCottonPart());
         if (repoSock.isPresent()) {
             if (repoSock.get().getQuantity() >= sock.getQuantity()) {
-                Socks tempSock = new Socks(repoSock.get().getColor(),
-                        repoSock.get().getCottonPart(), repoSock.get().getQuantity());
+                Socks tempSock = repoSock.get();
                 tempSock.setQuantity(tempSock.getQuantity() - sock.getQuantity());
                 socksRepository.save(tempSock);
                 return new ResponseEntity<>("Socks outcome registered", HttpStatus.OK);
