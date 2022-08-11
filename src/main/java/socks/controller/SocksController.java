@@ -42,10 +42,5 @@ public class SocksController {
 
     }
 
-    @GetMapping("/allSocks")
-    Iterable<Socks> getSocks() {
-        return socksService.findAll();
-    }
-
 
 }

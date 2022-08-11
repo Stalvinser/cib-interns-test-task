@@ -13,6 +13,5 @@ public interface ISocksService {
 
     ResponseEntity<?> registerNewSocksOutcome (Socks sock);
 
-    Iterable<Socks> findAll();
 
 }

@@ -81,10 +81,7 @@ public class SocksService implements ISocksService {
 
     }
 
-    @Override
-    public Iterable<Socks> findAll() {
-        return socksRepository.findAll();
-    }
+
 
 
 }
