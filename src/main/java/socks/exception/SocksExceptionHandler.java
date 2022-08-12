@@ -25,6 +25,8 @@ public class SocksExceptionHandler {
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+
+
     @ExceptionHandler(WebExchangeBindException.class)
     public  ResponseEntity<Map<String, List<String>>> handleWebExchangeBindException(WebExchangeBindException ex) {
         List<String> errors = ex.getBindingResult().getFieldErrors()

@@ -3,10 +3,7 @@ package socks.model;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 
@@ -22,6 +19,7 @@ public class Socks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     private String color;
+    @Column(name = "cottonpart")
     private int cottonPart;
     @Min(0)
     private int quantity;

@@ -3,7 +3,6 @@ package socks.controller;
 
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import socks.dto.SocksDTO;
 import socks.mapper.SocksMapper;
