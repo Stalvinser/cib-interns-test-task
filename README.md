@@ -1,3 +1,5 @@
+http://stalvinser.ru:8080/api/socks/
+
 # Тестовое задание для Java стажеров
 
 Привет!
