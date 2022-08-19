@@ -72,9 +72,9 @@ public class SocksService implements ISocksService {
                 socksRepository.save(tempSock);
                 return new ResponseEntity<>("Socks outcome registered", HttpStatus.OK);
             } else
-                return new ResponseEntity<>("not enough socks at warehouse, socks stored at warehouse = "
+                return new ResponseEntity<>("not enough socks at warehouse: socks stored at warehouse = "
                         + repoSock.get().getQuantity() +
-                        " socks ordered for outcome = " + sock.getQuantity(), HttpStatus.BAD_REQUEST);
+                        ", socks ordered for outcome = " + sock.getQuantity(), HttpStatus.BAD_REQUEST);
         } else
             return new ResponseEntity<>("no such color " + sock.getColor() +
                     " with cottonpart value " + sock.getCottonPart() + " at warehouse", HttpStatus.BAD_REQUEST);

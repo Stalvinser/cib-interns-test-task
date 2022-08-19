@@ -2,9 +2,7 @@ package socks.model;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 
 
@@ -19,9 +17,8 @@ public class Socks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     private String color;
-    @Column(name = "cottonpart")
+    @Column(name = "cotton_part")
     private int cottonPart;
-    @Min(0)
     private int quantity;
 
     public Socks(String color, int cottonPart, int quantity) {

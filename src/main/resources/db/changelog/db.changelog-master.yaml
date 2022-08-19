@@ -18,11 +18,10 @@ databaseChangeLog:
                   name: color
                   type: varchar(50)
                   constraints:
-                    unique: true
                     nullable: false
               - column:
-                  name: cottonpart
-                  type: smallint
+                  name: cotton_part
+                  type: integer
                   constraints:
                     nullable: false
               - column:
